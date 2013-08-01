@@ -1,37 +1,45 @@
 <?php
 namespace PFBC\View;
 
-class Inline extends \PFBC\View {
-	protected $class = "form-inline";
+use PFBC\Element;
+use PFBC\View;
 
-	public function render() {
-		$this->_form->appendAttribute("class", $this->class);
+class Inline extends View
+{
+    protected $class = "form-inline";
 
-		echo '<form', $this->_form->getAttributes(), '>';
-		$this->_form->getErrorView()->render();
+    public function render()
+    {
+        $this->_form->appendAttribute("class", $this->class);
 
-		$elements = $this->_form->getElements();
-        $elementSize = sizeof($elements);
+        echo '<form', $this->_form->getAttributes(), '>';
+        $this->_form->getErrorView()->render();
+
+        $elements     = $this->_form->getElements();
+        $elementSize  = sizeof($elements);
         $elementCount = 0;
-        for($e = 0; $e < $elementSize; ++$e) {
-			if($e > 0)
-				echo ' ';
+        for ($e = 0; $e < $elementSize; ++$e) {
+            if ($e > 0) {
+                echo ' ';
+            }
             $element = $elements[$e];
-			echo $this->renderLabel($element), ' ', $element->render(), $this->renderDescriptions($element);
-			++$elementCount;
+            echo $this->renderLabel($element), ' ', $element->render(), $this->renderDescriptions($element);
+            ++$elementCount;
         }
 
-		echo '</form>';
+        echo '</form>';
     }
 
-	protected function renderLabel(\PFBC\Element $element) {
+    protected function renderLabel(Element $element)
+    {
         $label = $element->getLabel();
-        if(!empty($label)) {
-			echo '<label for="', $element->getAttribute("id"), '">';
-			if($element->isRequired())
-				echo '<span class="required">* </span>';
-			echo $label;	
-			echo '</label>'; 
+        if (!empty($label)) {
+            echo '<label for="', $element->getAttribute("id"), '">';
+            if ($element->isRequired()) {
+                echo '<span class="required">* </span>';
+            }
+            echo $label;
+            echo '</label>';
         }
     }
 }	

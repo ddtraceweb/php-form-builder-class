@@ -1,13 +1,18 @@
 <?php
 namespace PFBC\Element;
 
-class HTML extends \PFBC\Element {
-	public function __construct($value) {
-		$properties = array("value" => $value);
-		parent::__construct("", "", $properties);
-	}
+use PFBC\Element;
 
-	public function render() { 
-		echo $this->_attributes["value"];
-	}
+class HTML extends Element
+{
+    public function __construct($value)
+    {
+        $properties = array("value" => $value);
+        parent::__construct("", "", $properties);
+    }
+
+    public function render()
+    {
+        echo $this->_attributes["value"];
+    }
 }

@@ -1,41 +1,53 @@
 <?php
 namespace PFBC\Element;
 
-class Textbox extends \PFBC\Element {
-	protected $_attributes = array("type" => "text");
-	protected $prepend;
-	protected $append;
+use PFBC\Element;
 
-	public function render() {
-		$addons = array();
-		if(!empty($this->prepend))
-			$addons[] = "input-prepend";
-		if(!empty($this->append))
-			$addons[] = "input-append";
-		if(!empty($addons))
-			echo '<div class="', implode(" ", $addons), '">';
+class Textbox extends Element
+{
+    protected $_attributes = array("type" => "text");
+    protected $prepend;
+    protected $append;
 
-		$this->renderAddOn("prepend");
-		parent::render();
-		$this->renderAddOn("append");
+    public function render()
+    {
+        $addons = array();
+        if (!empty($this->prepend)) {
+            $addons[] = "input-prepend";
+        }
+        if (!empty($this->append)) {
+            $addons[] = "input-append";
+        }
+        if (!empty($addons)) {
+            echo '<div class="', implode(" ", $addons), '">';
+        }
 
-		if(!empty($addons))
-			echo '</div>';
-	}
+        $this->renderAddOn("prepend");
+        parent::render();
+        $this->renderAddOn("append");
 
-	protected function renderAddOn($type = "prepend") {
-		if(!empty($this->$type)) {
-			$span = true;
-			if(strpos($this->$type, "<button") !== false)
-				$span = false;
+        if (!empty($addons)) {
+            echo '</div>';
+        }
+    }
 
-			if($span)
-				echo '<span class="add-on">';
+    protected function renderAddOn($type = "prepend")
+    {
+        if (!empty($this->$type)) {
+            $span = true;
+            if (strpos($this->$type, "<button") !== false) {
+                $span = false;
+            }
 
-			echo $this->$type;
+            if ($span) {
+                echo '<span class="add-on">';
+            }
 
-			if($span)
-				echo '</span>';
-		}
-	}
+            echo $this->$type;
+
+            if ($span) {
+                echo '</span>';
+            }
+        }
+    }
 }

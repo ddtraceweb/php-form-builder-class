@@ -14,6 +14,14 @@ The most significant enhancement in version 3.x is the integration with Bootstra
 
 PHP 5 >= 5.3
 
+## Assets requires
+
+* Jquery,
+* Jquery-ui,
+* Bootstrap,
+* Ckeditor,
+* Tiny-mce
+
 ## Installation Instructions
 
 Before writing any code, you'll first need to download the latest version of PFBC and upload the PFBC directory within the document root of your web server. The other files/directories outside of the PFBC folder that are included in the download are provided only for instruction and can be omitted from your production environment.
@@ -32,17 +40,39 @@ The links provided below are meant to demonstrate the key features included in t
 
 ```php
 <?php
-//PFBC 3.x PHP 5 >= 5.3
+
+use PFBC\Form;
+use PFBC\Element\Texbox;
+use PFBC\Element\Select;
+use PFBC\Element\Button;
+
 session_start();
-include($_SERVER["DOCUMENT_ROOT"] . "/PFBC/Form.php");
-$form = new PFBC\Form("GettingStarted");
-$form->addElement(new PFBC\Element\Textbox("My Textbox:", "MyTextbox"));
-$form->addElement(new PFBC\Element\Select("My Select:", "MySelect", array(
+
+$form = new Form("GettingStarted");
+
+$form->setDefaultUrlsJs(
+    array(
+        $form->getResourcesPath() . '/bootstrap/js/bootstrap.min.js',
+        $form->getResourcesPath() . '/jquery/js/jquery.min.js'
+        )
+    );
+
+$form->setDefaultUrlsCss(
+    array(
+        $form->getResourcesPath() . '/bootstrap/ccs/bootstrap.min.css',
+        $form->getResourcesPath() . '/bootstrap/css/bootstrap-responsive.min.css'
+        )
+    );
+
+$form->addElement(new Textbox("My Textbox:", "MyTextbox"));
+
+$form->addElement(new Select("My Select:", "MySelect", array(
    "Option #1",
    "Option #2",
    "Option #3"
 )));
-$form->addElement(new PFBC\Element\Button);
+
+$form->addElement(new Button);
 $form->render();
 ?>
 ```

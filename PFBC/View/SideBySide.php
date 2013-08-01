@@ -1,50 +1,63 @@
 <?php
 namespace PFBC\View;
 
-class SideBySide extends \PFBC\View {
-	protected $class = "form-horizontal";
+use PFBC\Element\Button;
+use PFBC\Element\Hidden;
+use PFBC\Element\HTML;
+use PFBC\Element;
+use PFBC\View;
 
-	public function render() {
-		$this->_form->appendAttribute("class", $this->class);
+class SideBySide extends View
+{
+    protected $class = "form-horizontal";
 
-		echo '<form', $this->_form->getAttributes(), '><fieldset>';
-		$this->_form->getErrorView()->render();
+    public function render()
+    {
+        $this->_form->appendAttribute("class", $this->class);
 
-		$elements = $this->_form->getElements();
-		$elementSize = sizeof($elements);
-		$elementCount = 0;
-		for($e = 0; $e < $elementSize; ++$e) {
-			$element = $elements[$e];
+        echo '<form', $this->_form->getAttributes(), '><fieldset>';
+        $this->_form->getErrorView()->render();
 
-			if($element instanceof \PFBC\Element\Hidden || $element instanceof \PFBC\Element\HTML)
-				$element->render();
-            elseif($element instanceof \PFBC\Element\Button) {
-                if($e == 0 || !$elements[($e - 1)] instanceof \PFBC\Element\Button)
-					echo '<div class="form-actions">';
-				else
-					echo ' ';
-				
-				$element->render();
+        $elements     = $this->_form->getElements();
+        $elementSize  = sizeof($elements);
+        $elementCount = 0;
+        for ($e = 0; $e < $elementSize; ++$e) {
+            $element = $elements[$e];
 
-                if(($e + 1) == $elementSize || !$elements[($e + 1)] instanceof \PFBC\Element\Button)
+            if ($element instanceof Hidden || $element instanceof HTML) {
+                $element->render();
+            } elseif ($element instanceof Button) {
+                if ($e == 0 || !$elements[($e - 1)] instanceof Button) {
+                    echo '<div class="form-actions">';
+                } else {
+                    echo ' ';
+                }
+
+                $element->render();
+
+                if (($e + 1) == $elementSize || !$elements[($e + 1)] instanceof Button) {
                     echo '</div>';
+                }
+            } else {
+                echo '<div class="control-group" id="element_', $element->getAttribute('id'), '">', $this->renderLabel(
+                    $element
+                ), '<div class="controls">', $element->render(), $this->renderDescriptions($element), '</div></div>';
+                ++$elementCount;
             }
-            else {
-				echo '<div class="control-group" id="element_', $element->getAttribute('id'), '">', $this->renderLabel($element), '<div class="controls">', $element->render(), $this->renderDescriptions($element), '</div></div>';
-				++$elementCount;
-			}
-		}
+        }
 
-		echo '</fieldset></form>';
+        echo '</fieldset></form>';
     }
 
-	protected function renderLabel(\PFBC\Element $element) {
+    protected function renderLabel(Element $element)
+    {
         $label = $element->getLabel();
-        if(!empty($label)) {
-			echo '<label class="control-label" for="', $element->getAttribute("id"), '">';
-			if($element->isRequired())
-				echo '<span class="required">* </span>';
-			echo $label, '</label>'; 
+        if (!empty($label)) {
+            echo '<label class="control-label" for="', $element->getAttribute("id"), '">';
+            if ($element->isRequired()) {
+                echo '<span class="required">* </span>';
+            }
+            echo $label, '</label>';
         }
     }
 }
